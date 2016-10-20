@@ -62,25 +62,13 @@ class Element
     to_be == other.to_be
   end
 
-  def distance_hash(elements)
-    distances = {}
-    elements.each { |element| distances[element] = (element.speed - @speed).magnitude }
-    distances
+  def distances(elements)
+    dists = {}
+    elements.each { |element| dists[element] = (element.speed - @speed).magnitude }
+    dists
   end
 
-  def within_distance(elements, distance)
+  def within(elements, distance)
     distance_hash(elements).select { |_elem, dist| dist < distance }
-  end
-
-  def within_limit(elements)
-    within_distance(elements, @limit)
-  end
-
-  def within_limit_if(elements, kind)
-    within_limit(elements).select { |element| element.kind == kind }
-  end
-
-  def nearest_element(elements)
-
   end
 end
