@@ -6,6 +6,7 @@ class Render
 
   def initialize(space) # takes the space
     @space = space
+    @time = 0
   end
 
   def render(length, height) # draws the game within the given coordinates
@@ -17,7 +18,7 @@ class Render
       view << line
     end
     show(view.reverse, height[1] - height[0])
-    @space.time += 1
+    @time += 1
   end
 
   def show(view, height) # puts the updated game state
@@ -30,7 +31,7 @@ class Render
 
   def hud # puts stats, controls, and how to quit below game
     return unless @space.hud
-    first = "max height: #{@space.max_height}  |  coins: #{@space.coins}  |  time: #{@space.time}"
+    first = "max height: #{@space.player.max_height}  |  coins: #{@space.player.coins}  |  time: #{@time}"
     second = "'a' = move left  |  'w' = jump  |  'd' = move right"
     third = "'q' = quit game  |  'h' = toggle hud"
     puts '-' * first.length
@@ -60,7 +61,7 @@ class Render
     when 'd' # jump
       @space.player.force(Vector[1, 0])
     when 'w' # up
-      @space.player.force(Vector[0, 4]) if @space.jump?
+      @space.player.force(Vector[0, 4]) if @space.player.jump?(@space.elements, @space.length)
     when 's' # down
       @space.player.force(Vector[0, -1])
     when 'h' # hud
@@ -70,7 +71,7 @@ class Render
 
   # while the player is still alive, tick space forward, draw game that follows player, and process user input
   def game_loop
-    while @space.alive == true
+    while @space.player.alive == true
       @space.tick
       render(@space.length, [@space.player.xy[1] - 5, @space.player.xy[1] + @space.height - 5])
       input = user_input
@@ -81,8 +82,8 @@ class Render
 
   def you_lose # puts end of game stuff
     puts 'YOU DIED!'
-    puts "max height: #{@space.max_height}"
-    puts "time: #{@space.time}"
+    puts "max height: #{@space.player.max_height}"
+    puts "time: #{@time}"
   end
 end
 

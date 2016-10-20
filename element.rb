@@ -17,6 +17,10 @@ class Element
     @xy += @speed
   end
 
+  def at_xy(elements, xy)
+    elements.detect { |element| element.xy == xy }
+  end
+
   def force(power) # adds a force vector to speed
     @speed += power
   end
@@ -43,7 +47,7 @@ class Element
     end
   end
 
-  def to(x, y, length) # gets an element at a given position relative to calling element
+  def to(x, y, length) # return a vector relative to calling element
     bound_check = Vector[@xy[0] + x, @xy[1] + y]
     if bound_check[0] < 0
       Vector[length, bound_check[1]]
