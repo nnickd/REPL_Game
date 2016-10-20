@@ -26,7 +26,7 @@ class Render
       puts view[y].join(' ')
     end
     hud
-    @space.debug
+    # @space.debug
   end
 
   def hud # puts stats, controls, and how to quit below game
@@ -36,11 +36,9 @@ class Render
     third = "'q' = quit game  |  'h' = toggle hud"
     puts '-' * first.length
     puts first
-    puts '-' * first.length
     puts '-' * second.length
     puts second
     puts '-' * second.length
-    puts '-' * third.length
     puts third
     puts '-' * third.length
   end
@@ -89,6 +87,9 @@ end
 
 puts 'length?'
 length = gets.chomp.to_i
-space = Space.new(length, 64, [0, -1])
+length = length > 59 ? 59 : length
+length = length < 7 ? 7 : length
+
+space = Space.new(length, 42, [0, -1])
 view = Render.new(space)
 view.game_loop

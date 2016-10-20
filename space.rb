@@ -46,7 +46,7 @@ class Space
     element.force(@gravity)
     collide(element)
     element.tick
-    element.bounds(@length - 1)
+    element.bounds(@length)
   end
 
   def collide(elem) # stops blocks from colliding with eachother
