@@ -1,7 +1,7 @@
 require_relative 'player.rb'
 
 class Space
-  attr_accessor :length, :height, :gravity, :elements, :player, :hud
+  attr_accessor :length, :height, :gravity, :elements, :player # , :hud
 
   def initialize(length, height, gravity) # sets up the game
     @length = length
@@ -9,7 +9,7 @@ class Space
     @gravity = Vector.elements(gravity)
     @player = Player.new(gets_char, [0, 1])
     @elements = [@player]
-    @hud = true
+    # @hud = true
     create_floor(@length, 0)
   end
 
@@ -30,7 +30,6 @@ class Space
     drop_blocks(@length, @player.xy[1] + @height, [6, 9, 12])
     @player.grab_coin(@elements)
     elementer
-    # @player.grab_coin(@elements)
   end
 
   def elementer # ticks each element that's either a player or a falling block

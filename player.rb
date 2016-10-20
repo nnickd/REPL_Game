@@ -1,13 +1,14 @@
 require_relative 'element.rb'
 
 class Player < Element
-  attr_accessor :alive, :max_height, :hud, :coins
+  attr_accessor :alive, :max_height, :coins, :hud
   def initialize(kind = '~', xy = [0, 0], speed = [0, 0], limit = 2)
     super(kind, xy, speed, limit)
     @alive = true
     @max_height = @xy[1]
     @hud = true
     @coins = 0
+    @hud = true
   end
 
   def grab_coin(elements)
@@ -33,6 +34,21 @@ class Player < Element
       at_xy(elements, to(0, -1, length)) ||
       at_xy(elements, to(1, 0, length)) ||
       at_xy(elements, to(-1, 0, length))
+  end
+
+  def process_input(space, command)
+    case command.downcase
+    when 'a' # left
+      force(Vector[-1, 0])
+    when 'd' # jump
+      force(Vector[1, 0])
+    when 'w' # up
+      force(Vector[0, 4]) if jump?(space.elements, space.length)
+    when 's' # down
+      force(Vector[0, -1])
+    when 'h' # hud
+      @hud = !@hud
+    end
   end
 
 end

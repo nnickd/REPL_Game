@@ -30,17 +30,15 @@ class Render
   end
 
   def hud # puts stats, controls, and how to quit below game
-    return unless @space.hud
-    first = "max height: #{@space.player.max_height}  |  coins: #{@space.player.coins}  |  time: #{@time}"
-    second = "'a' = move left  |  'w' = jump  |  'd' = move right"
-    third = "'q' = quit game  |  'h' = toggle hud"
-    puts '-' * first.length
-    puts first
-    puts '-' * second.length
-    puts second
-    puts '-' * second.length
-    puts third
-    puts '-' * third.length
+    return unless @space.player.hud
+    stats = "max height: #{@space.player.max_height}  |  coins: #{@space.player.coins}  |  "
+    vectors = "time: #{@time}  |  xy: #{@space.player.xy.to_a}  |  speed: #{@space.player.speed.to_a}"
+    commands = "a = move left  |  w = jump  |  d = move right  |  q = quit game  |  h = toggle hud"
+    puts '-' * (stats.length + vectors.length)
+    puts stats << vectors
+    puts '-' * commands.length
+    puts commands
+    puts '-' * commands.length
   end
 
   def user_input # takes single character user input and returns as command
@@ -51,29 +49,14 @@ class Render
     command
   end
 
-  # processess user input for moving player, jumping and toggling the hud
-  def process_input(command)
-    case command.downcase
-    when 'a' # left
-      @space.player.force(Vector[-1, 0])
-    when 'd' # jump
-      @space.player.force(Vector[1, 0])
-    when 'w' # up
-      @space.player.force(Vector[0, 4]) if @space.player.jump?(@space.elements, @space.length)
-    when 's' # down
-      @space.player.force(Vector[0, -1])
-    when 'h' # hud
-      @space.hud = !@space.hud
-    end
-  end
-
   # while the player is still alive, tick space forward, draw game that follows player, and process user input
   def game_loop
     while @space.player.alive == true
       @space.tick
-      render(@space.length, [@space.player.xy[1] - 5, @space.player.xy[1] + @space.height - 5])
+      player_height = @space.player.xy[1] - 5
+      render(@space.length, [player_height, @space.height + player_height])
       input = user_input
-      input == 'q' ? break : process_input(input)
+      input == 'q' ? break : @space.player.process_input(@space, input)
     end
     you_lose
   end
