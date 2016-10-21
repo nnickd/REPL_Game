@@ -50,5 +50,4 @@ class Player < Element
       @hud = !@hud
     end
   end
-
 end

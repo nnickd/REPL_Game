@@ -50,8 +50,8 @@ class Element
   def to(x, y, length) # return a vector relative to calling element
     bound_check = Vector[@xy[0] + x, @xy[1] + y]
     if bound_check[0] < 0
-      Vector[length, bound_check[1]]
-    elsif bound_check[0] > length - 1
+      Vector[length - 1, bound_check[1]]
+    elsif bound_check[0] >= length
       Vector[0, bound_check[1]]
     else
       bound_check
@@ -73,6 +73,6 @@ class Element
   end
 
   def within(elements, distance)
-    distance_hash(elements).select { |_elem, dist| dist < distance }
+    distances(elements).select { |_elem, dist| dist <= distance }
   end
 end

@@ -31,9 +31,9 @@ class Render
 
   def hud # puts stats, controls, and how to quit below game
     return unless @space.player.hud
-    stats = "max height: #{@space.player.max_height}  |  coins: #{@space.player.coins}  |  "
-    vectors = "time: #{@time}  |  xy: #{@space.player.xy.to_a}  |  speed: #{@space.player.speed.to_a}"
-    commands = "a = move left  |  w = jump  |  d = move right  |  q = quit game  |  h = toggle hud"
+    stats = "max height: #{@space.player.max_height} | coins: #{@space.player.coins} | "
+    vectors = "time: #{@time} | xy: #{@space.player.xy.to_a} | speed: #{@space.player.speed.to_a}"
+    commands = "a: move left | w: jump | d: move right | q: quit game | h: toggle hud"
     puts '-' * (stats.length + vectors.length)
     puts stats << vectors
     puts '-' * commands.length

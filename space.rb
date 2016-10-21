@@ -1,7 +1,7 @@
 require_relative 'player.rb'
 
 class Space
-  attr_accessor :length, :height, :gravity, :elements, :player # , :hud
+  attr_accessor :length, :height, :gravity, :elements, :player
 
   def initialize(length, height, gravity) # sets up the game
     @length = length
@@ -9,7 +9,6 @@ class Space
     @gravity = Vector.elements(gravity)
     @player = Player.new(gets_char, [0, 1])
     @elements = [@player]
-    # @hud = true
     create_floor(@length, 0)
   end
 
@@ -28,12 +27,12 @@ class Space
 
   def tick # drops random elements and ticks forward each element 1 unit of time
     drop_blocks(@length, @player.xy[1] + @height, [6, 9, 12])
-    @player.grab_coin(@elements)
     elementer
   end
 
   def elementer # ticks each element that's either a player or a falling block
     @player.update_stats(@elements, @length)
+    @player.grab_coin(@elements)
     @elements.each do |element|
       next if element.kind == '='
       element_tick(element)
@@ -45,7 +44,8 @@ class Space
     element.force(@gravity)
     collide(element)
     element.tick
-    element.bounds(@length)
+    collide(element)
+    element.bounds(@length - 1)
   end
 
   def collide(elem) # stops blocks from colliding with eachother
@@ -88,6 +88,6 @@ class Space
   end
 
   def create_floor(length, height) # creates a floor
-    (0..length).each { |i| @elements << Element.new('=', [i, height]) }
+    (0...length).each { |i| @elements << Element.new('=', [i, height]) }
   end
 end
