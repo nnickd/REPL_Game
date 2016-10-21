@@ -1,7 +1,7 @@
 require_relative 'element.rb'
 
 class Player < Element
-  attr_accessor :alive, :max_height, :coins, :hud
+  attr_accessor :alive, :max_height, :coins, :hud, :debug
   def initialize(kind = '~', xy = [0, 0], speed = [0, 0], limit = 2)
     super(kind, xy, speed, limit)
     @alive = true
@@ -9,6 +9,7 @@ class Player < Element
     @hud = true
     @coins = 0
     @hud = true
+    @debug = true
   end
 
   def grab_coin(elements)
@@ -48,6 +49,8 @@ class Player < Element
       force(Vector[0, -1])
     when 'h' # hud
       @hud = !@hud
+    when 'g' # debug
+      @debug = !@debug
     end
   end
 end

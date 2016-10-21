@@ -1,5 +1,4 @@
 require_relative 'space.rb'
-require_relative 'element.rb'
 
 class Render
   attr_accessor :space
@@ -12,7 +11,8 @@ class Render
   def render(length, height) # draws the game within the given coordinates
     view = []
     (height[0]..height[1]).each do |y|
-      line = [' '] * length
+      # line = [' '] * length
+      line = Array.new(length, ' ')
       y_list = @space.elements.select { |element| element.xy[1] == y }
       y_list.each { |element| line[element.xy[0]] = element.kind }
       view << line
@@ -26,19 +26,26 @@ class Render
       puts view[y].join(' ')
     end
     hud
-    # @space.debug
+    debug
   end
 
   def hud # puts stats, controls, and how to quit below game
     return unless @space.player.hud
     stats = "max height: #{@space.player.max_height} | coins: #{@space.player.coins} | "
     vectors = "time: #{@time} | xy: #{@space.player.xy.to_a} | speed: #{@space.player.speed.to_a}"
-    commands = "a: move left | w: jump | d: move right | q: quit game | h: toggle hud"
+    commands = 'a: move left | w: jump | d: move right | q: quit game | h: toggle hud'
     puts '-' * (stats.length + vectors.length)
     puts stats << vectors
     puts '-' * commands.length
     puts commands
     puts '-' * commands.length
+  end
+
+  def debug
+    return unless @space.player.debug
+    p @space.player
+    p @space.player.to_be
+    p @space.at_xy(@space.player.to_be)
   end
 
   def user_input # takes single character user input and returns as command
@@ -53,7 +60,7 @@ class Render
   def game_loop
     while @space.player.alive == true
       @space.tick
-      player_height = @space.player.xy[1] - 5
+      player_height = @space.player.xy[1] - 3
       render(@space.length, [player_height, @space.height + player_height])
       input = user_input
       input == 'q' ? break : @space.player.process_input(@space, input)

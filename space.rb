@@ -20,11 +20,6 @@ class Space
     char
   end
 
-  def debug
-    p @player
-    p at_xy(@player.to_be)
-  end
-
   def tick # drops random elements and ticks forward each element 1 unit of time
     drop_blocks(@length, @player.xy[1] + @height, [6, 9, 12])
     elementer
